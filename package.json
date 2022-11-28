@@ -1,0 +1,55 @@
+{
+  "name": "haversine-ts",
+  "version": "1.0.0",
+  "description": "Typescript minimalistic library with utilities for distance calculation on a sphere surface",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig-build.json",
+    "beautify": "prettier . --write --ignore-unknown",
+    "lint": "eslint . --ext .ts --fix --max-warnings=0",
+    "test": "mocha -r ts-node/register -r tsconfig-paths/register 'tests/**/*.spec.ts'",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VGavara/haversine-ts.git"
+  },
+  "keywords": [
+    "haversine",
+    "sphere",
+    "distance",
+    "latitude",
+    "longitude"
+  ],
+  "author": "Vicente Gavara",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VGavara/haversine-ts/issues"
+  },
+  "homepage": "https://github.com/VGavara/haversine-ts#readme",
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.0",
+    "@types/sinon": "^10.0.13",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.4",
+    "mocha": "^10.1.0",
+    "prettier": "^2.8.0",
+    "prettier-plugin-jsdoc": "^0.4.2",
+    "sinon": "^15.0.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.9.3"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run beautify",
+      "npm run lint"
+    ]
+  }
+}

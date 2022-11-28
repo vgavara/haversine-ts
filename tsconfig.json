@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "target": "es6",
+    "lib": ["es5", "es6", "es7"],
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths": {
+      "*": ["node_modules/*"],
+      "@typings": ["src/typings"],
+      "@typings/*": ["src/typings/*"],
+      "@src/*": ["src/*"]
+    }
+  },
+  "include": ["src", "tests"],
+  "ts-node": {
+    "files": true
+  }
+}
