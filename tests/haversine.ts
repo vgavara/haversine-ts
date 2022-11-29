@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Haversine, UnitOfDistance } from "@src/Haversine";
+import { Haversine, UnitOfDistance } from "@src/haversine";
 import {
   pointA,
   pointB,
