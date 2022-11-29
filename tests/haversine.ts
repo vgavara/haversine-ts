@@ -7,11 +7,7 @@ import {
   earthVolumetricMeanRadius,
   earthVMRPointABDistances
 } from "./mocks";
-
-const round = (number: number, decimalPlaces: number) => {
-  const powOfTen = 10 ** decimalPlaces;
-  return Math.round(number * powOfTen) / powOfTen;
-};
+import { round } from "./helpers";
 
 const testGetDistance = (
   unitOfDistance: UnitOfDistance,

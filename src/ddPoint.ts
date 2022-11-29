@@ -1,3 +1,5 @@
+import { DMSCoordinate, DMSPoint } from "./dmsPoint";
+
 /** Sphere point defined by a latitude and a longitude in decimal degrees (DD) */
 export class DDPoint {
   latitude: number;
@@ -24,5 +26,37 @@ export class DDPoint {
 
     this.latitude = latitude;
     this.longitude = longitude;
+  }
+
+  /**
+   * Gets the equivalent point in degrees minutes seconds (DMS) notation
+   *
+   * @returns {DMSPoint} Equivalent sphere point defined in degrees minutes
+   *   seconds
+   */
+  toDMSPoint(): DMSPoint {
+    const dmsLatitude = this.toDMSCoordinate(this.latitude);
+    const dmsLongitude = this.toDMSCoordinate(this.longitude);
+
+    return new DMSPoint(dmsLatitude, dmsLongitude);
+  }
+
+  /**
+   * Gets the equivalent coordinate in degrees minutes seconds (DMS) notation
+   *
+   * @returns {DMSCoordinate} Equivalent sphere coordinate defined in degrees
+   *   minutes seconds
+   */
+  private toDMSCoordinate(ddCoordinate: number): DMSCoordinate {
+    const absDDCoordinate = Math.abs(ddCoordinate);
+    const degrees = Math.floor(absDDCoordinate);
+    const minutes = Math.floor((absDDCoordinate - degrees) * 60);
+    const seconds = (absDDCoordinate - degrees - minutes / 60) * 3600;
+
+    return new DMSCoordinate(
+      ddCoordinate >= 0 ? degrees : -degrees,
+      minutes,
+      seconds
+    );
   }
 }
