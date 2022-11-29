@@ -1,3 +1,5 @@
+import haversineTestSuite from "./haversine";
+
 describe("haversine-ts test suite", () => {
-  return;
+  describe("Haversine class test suite", haversineTestSuite);
 });
