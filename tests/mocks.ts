@@ -1,4 +1,4 @@
-import { UnitOfDistance } from "@src/Haversine";
+import { UnitOfDistance } from "@src/haversine";
 import { DDPoint } from "@src/ddPoint";
 
 export const decimalLatitude = 55.7488;
