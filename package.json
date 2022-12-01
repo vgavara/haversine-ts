@@ -1,6 +1,6 @@
 {
   "name": "haversine-ts",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Typescript minimalistic library with utilities for distance calculation on a sphere surface",
   "main": "index.js",
   "scripts": {
