@@ -14,12 +14,7 @@ export class DDPoint {
    *   degrees.
    */
   constructor(latitude: number, longitude: number) {
-    if (
-      latitude < -180 ||
-      latitude > 180 ||
-      longitude < -180 ||
-      longitude > 180
-    )
+    if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
       throw new Error(
         "Coordinate(s) out of range: they must be in the range -180 to 180"
       );
