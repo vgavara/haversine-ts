@@ -1,9 +1,9 @@
 name: Release CD
 
 on:
-  create:
+  push:
     tags:
-      - '*'
+      - .*
 
 jobs:
   build_publish:
