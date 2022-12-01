@@ -114,6 +114,7 @@ npm install haversine-ts
 ## Usage
 
 ### Overview
+
 The [Haversine](#Haversine) class supports the implementation of the distance resolver. It uses as input decimal degrees (DD) coordinates defined as [DDPoint](#DDPoint) class object instances, that can be converted into degrees minutes seconds (DMS) coordinates as instances of the [DMSPoint](#DMSPoint) class. Each [DMSPoint](#DMSPoint) object instance is composed by two [DMSCoordinate](#DMSCoordinate) class object instances.
 
 <a name="DDPoint"></a>
