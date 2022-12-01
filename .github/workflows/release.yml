@@ -3,7 +3,7 @@ name: Release CD
 on:
   create:
     tags:
-      - *(?!(alpha|beta))
+      - '*'
 
 jobs:
   build_publish:
