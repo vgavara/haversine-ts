@@ -3,10 +3,11 @@
 Typescript minimalistic library with utilities for distance calculation on a sphere surface, as the distance between two geographical coordinates given their latitude and longitude.
 
 Main package features:
-  * Allows calculating distances between to points in metres, kilometres or miles.
-  * Allows using decimal degree (DD) or degrees minutes seconds (DMS) coordinates.
-  * Allows specifying custom sphere radius.
-  * Based on Typescript classes.
+
+- Allows calculating distances between to points in metres, kilometres or miles.
+- Allows using decimal degree (DD) or degrees minutes seconds (DMS) coordinates.
+- Allows specifying custom sphere radius.
+- Based on Typescript classes.
 
 # At a glance
 
@@ -18,19 +19,17 @@ import { DDPoint, Haversine } from "haversine-ts";
 // New York decimal degrees (DD) coordinates are:
 // latitude 40.730610 N,
 // longitude 73.935242 W
-const newYork = new DDPoint(40.730610, -73.935242);
+const newYork = new DDPoint(40.73061, -73.935242);
 
 // Madrid decimal degrees (DD) coordinates are:
 // latitude 40.416775 N,
 // longitude 3.703790 W
-const madrid = new DDPoint(40.416775, -3.703790);
+const madrid = new DDPoint(40.416775, -3.70379);
 
 const haversine = new Haversine();
 const distance = haversine.getDistance(newYork, madrid);
 
-console.log(
-  `The distance from New York to Madrid is ${distance} kilometres.`
-);
+console.log(`The distance from New York to Madrid is ${distance} kilometres.`);
 ```
 
 ## Calculate the distance, in miles, between two decimal degrees coordinates
@@ -38,8 +37,8 @@ console.log(
 ```typescript
 import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
 
-const newYork = new DDPoint(40.730610, -73.935242);
-const madrid = new DDPoint(40.416775, -3.703790);
+const newYork = new DDPoint(40.73061, -73.935242);
+const madrid = new DDPoint(40.416775, -3.70379);
 
 const haversine = new Haversine(UnitOfDistance.Mile);
 const distance = haversine.getDistance(newYork, madrid);
@@ -71,17 +70,16 @@ const madrid = new DMSPoint(
 const haversine = new Haversine();
 const distance = haversine.getDistance(newYork.toDDPoint(), madrid.toDDPoint());
 
-console.log(
-  `The distance from New York to Madrid is ${distance} kilometres.`
-);
+console.log(`The distance from New York to Madrid is ${distance} kilometres.`);
 ```
+
 ## Calculate the distance, in metres, between two coordinates specifying a custom sphere radius
 
 ```typescript
 import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
 
-const newYork = new DDPoint(40.730610, -73.935242);
-const madrid = new DDPoint(40.416775, -3.703790);
+const newYork = new DDPoint(40.73061, -73.935242);
+const madrid = new DDPoint(40.416775, -3.70379);
 
 // Use the Earth volumetric mean radius (6371 km)
 // instead of the default Earth equatorial radius (6378.137 km).
