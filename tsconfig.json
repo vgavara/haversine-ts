@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "declaration": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -8,8 +9,7 @@
     "lib": ["es5", "es6", "es7"],
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "baseUrl": ".",
     "skipLibCheck": true,
     "paths": {
