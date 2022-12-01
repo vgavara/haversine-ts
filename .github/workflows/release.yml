@@ -3,7 +3,7 @@ name: Release CD
 on:
   push:
     tags:
-      - v[0-9]+.[0-9]+.[0-9]+
+      - ^v[0-9]+.[0-9]+.[0-9]+$
 
 jobs:
   build_publish:
@@ -21,8 +21,6 @@ jobs:
         run: npm install --production=true --ignore-scripts
       - name: Build
         run: npm run build
-      - name: Set NPM package version
-        run: npm version ${{ github.ref_name }}
       - name: Publish to NPM
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
