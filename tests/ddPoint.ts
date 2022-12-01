@@ -26,4 +26,32 @@ export default () => {
       dmsLongitude.seconds
     );
   });
+
+  it("should throw an error if the latitude is out of bounds", () => {
+    const trySetLatitude = (latitude: number): boolean => {
+      try {
+        new DDPoint(latitude, 0);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    expect(trySetLatitude(-90.1)).to.be.false;
+    expect(trySetLatitude(90.1)).to.be.false;
+  });
+
+  it("should throw an error if the longitude is out of bounds", () => {
+    const trySetLongitude = (longitude: number): boolean => {
+      try {
+        new DDPoint(0, longitude);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    expect(trySetLongitude(-180.1)).to.be.false;
+    expect(trySetLongitude(180.1)).to.be.false;
+  });
 };
