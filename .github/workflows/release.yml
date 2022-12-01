@@ -1,9 +1,9 @@
 name: Release CD
 
 on:
-  create:
+  push:
     tags:
-      - *(?!(alpha|beta))
+      - v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   build_publish:
