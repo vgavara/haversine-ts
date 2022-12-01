@@ -48,8 +48,12 @@ export class DMSPoint {
    *   seconds.
    * @param {DMSCoordinate} longitude - Longitude coordinate in degrees minutes
    *   seconds.
+   * @throws Error if latitude degrees are out of range (-90 to 90)
    */
   constructor(latitude: DMSCoordinate, longitude: DMSCoordinate) {
+    if (latitude.degrees < -90 || latitude.degrees > 90)
+      throw new Error("Latitude out of range: It must be between -90 and 90");
+
     this.latitude = latitude;
     this.longitude = longitude;
   }
