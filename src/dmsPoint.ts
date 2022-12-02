@@ -19,7 +19,7 @@ export class DMSCoordinate {
       degrees < -180 ||
       degrees > 180 ||
       minutes < 0 ||
-      minutes >= 60 ||
+      minutes > 59 ||
       seconds < 0 ||
       seconds >= 60
     )
