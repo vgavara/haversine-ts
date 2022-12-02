@@ -1,11 +1,11 @@
 {
   "name": "haversine-ts",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Typescript minimalistic library with utilities for distance calculation on a sphere surface",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*"
+    "lib"
   ],
   "scripts": {
     "build": "tsc -p tsconfig-build.json",
