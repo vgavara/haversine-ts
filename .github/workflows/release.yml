@@ -22,8 +22,9 @@ jobs:
       - name: Build
         run: npm run build
       - name: Set NPM environment
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
       - name: Publish to NPM
         run: npm publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        

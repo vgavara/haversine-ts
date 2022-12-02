@@ -4,11 +4,30 @@ import {
   decimalLatitude,
   decimalLongitude,
   dmsLatitude,
-  dmsLongitude
+  dmsLongitude,
+  minLatitude,
+  maxLatitude,
+  minLongitude,
+  maxLongitude,
+  offset
 } from "./mocks";
 import { round } from "./helpers";
 
+const tryCreateDDPoint = (latitude: number, longitude: number): boolean => {
+  try {
+    new DDPoint(latitude, longitude);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export default () => {
+  it("should create a decimal degrees point", () => {
+    expect(tryCreateDDPoint(minLatitude, minLongitude)).to.be.true;
+    expect(tryCreateDDPoint(maxLatitude, maxLongitude)).to.be.true;
+  });
+
   it("should return a degrees minutes seconds point equivalent", () => {
     const ddPoint = new DDPoint(decimalLatitude, decimalLongitude);
 
@@ -28,30 +47,12 @@ export default () => {
   });
 
   it("should throw an error if the latitude is out of bounds", () => {
-    const trySetLatitude = (latitude: number): boolean => {
-      try {
-        new DDPoint(latitude, 0);
-        return true;
-      } catch {
-        return false;
-      }
-    };
-
-    expect(trySetLatitude(-90.1)).to.be.false;
-    expect(trySetLatitude(90.1)).to.be.false;
+    expect(tryCreateDDPoint(minLatitude - offset, 0)).to.be.false;
+    expect(tryCreateDDPoint(maxLatitude + offset, 0)).to.be.false;
   });
 
   it("should throw an error if the longitude is out of bounds", () => {
-    const trySetLongitude = (longitude: number): boolean => {
-      try {
-        new DDPoint(0, longitude);
-        return true;
-      } catch {
-        return false;
-      }
-    };
-
-    expect(trySetLongitude(-180.1)).to.be.false;
-    expect(trySetLongitude(180.1)).to.be.false;
+    expect(tryCreateDDPoint(0, minLongitude - offset)).to.be.false;
+    expect(tryCreateDDPoint(0, maxLongitude + offset)).to.be.false;
   });
 };
