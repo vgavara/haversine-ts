@@ -11,8 +11,7 @@
     "build": "tsc -p tsconfig-build.json",
     "beautify": "prettier . --write --ignore-unknown",
     "lint": "eslint . --ext .ts --fix --max-warnings=0",
-    "test": "mocha -r ts-node/register -r tsconfig-paths/register 'tests/**/*.spec.ts'",
-    "postinstall": "husky install"
+    "test": "mocha -r ts-node/register -r tsconfig-paths/register 'tests/**/*.spec.ts'"
   },
   "repository": {
     "type": "git",
