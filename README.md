@@ -11,6 +11,7 @@ Main package features:
 
 - Allows calculating distances between to points in metres, kilometres or miles.
 - Allows using decimal degree (DD) or degrees minutes seconds (DMS) coordinates.
+- Allows calculating start and end bearings of a path between two points.
 - Allows specifying custom sphere radius (default is Earth equatorial radius).
 
 ## At a glance
@@ -36,24 +37,15 @@ const distance = haversine.getDistance(newYork, madrid);
 console.log(`The distance from New York to Madrid is ${distance} kilometres.`);
 ```
 
-### Calculate the distance, in miles, between two decimal degrees coordinates
+### Calculate the distance, in miles, between two degrees minutes seconds (DMS) coordinates
 
 ```typescript
-import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
-
-const newYork = new DDPoint(40.73061, -73.935242);
-const madrid = new DDPoint(40.416775, -3.70379);
-
-const haversine = new Haversine(UnitOfDistance.Mile);
-const distance = haversine.getDistance(newYork, madrid);
-
-console.log(`The distance from New York to Madrid is ${distance} miles.`);
-```
-
-### Calculate the distance, in kilometers, between two degrees minutes seconds (DMS) coordinates
-
-```typescript
-import { DMSCoordinate, DMSPoint, Haversine } from "haversine-ts";
+import {
+  DMSCoordinate,
+  DMSPoint,
+  Haversine,
+  UnitOfDistance
+} from "haversine-ts";
 
 // New York DMS coordinates are
 // latitude 40° 43' 50.1960'' N,
@@ -71,13 +63,13 @@ const madrid = new DMSPoint(
   new DMSCoordinate(3, 42, 13.644)
 );
 
-const haversine = new Haversine();
+const haversine = new Haversine(UnitOfDistance.Mile);
 const distance = haversine.getDistance(newYork.toDDPoint(), madrid.toDDPoint());
 
-console.log(`The distance from New York to Madrid is ${distance} kilometres.`);
+console.log(`The distance from New York to Madrid is ${distance} miles.`);
 ```
 
-### Calculate the distance, in metres, between two coordinates specifying a custom sphere radius
+### Calculate the bearing between two points
 
 ```typescript
 import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
@@ -85,21 +77,11 @@ import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
 const newYork = new DDPoint(40.73061, -73.935242);
 const madrid = new DDPoint(40.416775, -3.70379);
 
-// Use the Earth volumetric mean radius (6371 km)
-// instead of the default Earth equatorial radius (6378.137 km).
-// Radius must be in the same magnitude
-// than the haversine specified unit of distance
-// (metres in this example)
-const earthVolumetricMeanRadius = 6371 * 1000;
-
-const haversine = new Haversine(
-  UnitOfDistance.Metre,
-  earthVolumetricMeanRadius
-);
-const distance = haversine.getDistance(newYork, madrid);
+const haversine = new Haversine();
+const bearing = haversine.getBearing(newYork, madrid);
 
 console.log(
-  `The distance from New York to Madrid is ${distance} metres using Earth volumetric mean radius.`
+  `The start bearing of the path from New York to Madrid is ${bearing.start} degrees, and the end bearing is ${bearing.end} degrees.`
 );
 ```
 
@@ -115,7 +97,11 @@ npm install haversine-ts
 
 ### Overview
 
-The [Haversine](#Haversine) class supports the implementation of the distance resolver. It uses as input decimal degrees (DD) coordinates defined as [DDPoint](#DDPoint) class object instances, that can be converted into degrees minutes seconds (DMS) coordinates as instances of the [DMSPoint](#DMSPoint) class. Each [DMSPoint](#DMSPoint) object instance is composed by two [DMSCoordinate](#DMSCoordinate) class object instances.
+The [Haversine](#Haversine) class supports the implementation of the distance and bearing resolvers.
+
+It uses as input decimal degrees (DD) coordinates defined as [DDPoint](#DDPoint) class object instances, that can be converted into degrees minutes seconds (DMS) coordinates as instances of the [DMSPoint](#DMSPoint) class. Each [DMSPoint](#DMSPoint) object instance is composed by two [DMSCoordinate](#DMSCoordinate) class object instances.
+
+The [SphereBearing](#SphereBearing) class represents a tuple with the start and end bearings of a sphere path (orthodrome) between two points.
 
 <a name="DDPoint"></a>
 
@@ -163,7 +149,7 @@ const newYork = new DDPoint(40.73061, -73.935242);
 const newYorkDMS = newYork.toDMSPoint();
 
 console.log(
-  `The coordinates of New York, in DMS notation, are ${newYorkDMS.degrees} degrees, {newYorkDMS.minutes} minutes, {newYorkDMS.seconds} seconds`
+  `The coordinates of New York, in DMS notation, are ${newYorkDMS.degrees} degrees, ${newYorkDMS.minutes} minutes, ${newYorkDMS.seconds} seconds`
 );
 ```
 
@@ -275,6 +261,7 @@ Haversine formula resolver.
   - [new Haversine([uod], [sphereRadius])](#new_Haversine_new)
 - Methods:
   - [.getDistance(pointA, pointB)](#Haversine+getDistance) ⇒ <code>number</code>
+  - [.getBearing(pointA, pointB)](#Haversine+getBearing) ⇒ [<code>SphereBearing</code>](#SphereBearing)
 
 <a name="new_Haversine_new"></a>
 
@@ -317,6 +304,63 @@ console.log(`The distance from New York to Madrid is ${distance} kilometres.`);
 - Returns:
   - <code>number</code> - Distance between the points, in the unit of distance set
     in the class constructor.
+
+<a name="Haversine+getBearing"></a>
+
+#### haversine.getBearing(pointA, pointB) ⇒ <code>SphereBearing</code>
+
+Calculates the sphere bearing, or start and end bearings, of the path between two points in a sphere.
+
+```typescript
+import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
+
+const newYork = new DDPoint(40.73061, -73.935242);
+const madrid = new DDPoint(40.416775, -3.70379);
+
+const haversine = new Haversine();
+const bearing = haversine.getBearing(newYork, madrid);
+
+console.log(
+  `The start bearing of the path from New York to Madrid is ${bearing.start} degrees, and the end bearing is ${bearing.end} degrees.`
+);
+```
+
+- Parameters:
+  - pointA (<code>DDPoint</code>): Point A, in decimal degrees coordinates.
+  - pointB (<code>DDPoint</code>): Point B, in decimal degrees coordinates.
+- Returns:
+  - [<code>SphereBearing</code>](#SphereBearing) - Bearings of the path from pointA to pointB, in degrees (0 to 360, clockwise from North).
+
+<a name="SphereBearing"></a>
+
+### SphereBearing
+
+Sphere bearing as a tuple of start and end bearings of a sphere path (orthodrome) between two points.
+
+- Constructors:
+  - [new SphereBearing(start, end)](#new_SphereBearing_new)
+
+<a name="new_SphereBearing_new"></a>
+
+#### new SphereBearing(start, end)
+
+Initializes a sphere bearing object instance.
+
+```typescript
+import { SphereBearing } from "haversine-ts";
+
+const bearing = new SphereBearing(60.5, 181);
+
+console.log(
+  `The start bearing of the path from A to B is ${bearing.start} degrees, and the end bearing is ${bearing.end} degrees.`
+);
+```
+
+- Parameters
+  - start (`number`): Start bearing, from 0 to <360 clockwise from North.
+  - end (`number`): End bearing, from 0 to <360 clockwise from North.
+- Throws:
+  - Error if start or end bearings are out of range.
 
 <a name="UnitOfDistance"></a>
 

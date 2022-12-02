@@ -1,7 +1,7 @@
 {
   "name": "haversine-ts",
-  "version": "1.0.6",
-  "description": "Typescript minimalistic library with utilities for distance calculation on a sphere surface",
+  "version": "1.1.0",
+  "description": "Typescript library with utilities for calculations on a sphere surface",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -21,6 +21,7 @@
     "haversine",
     "sphere",
     "distance",
+    "bearing",
     "latitude",
     "longitude"
   ],
