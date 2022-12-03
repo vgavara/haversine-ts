@@ -52,7 +52,7 @@ import {
 // longitude 73° 56' 6.8712'' W
 const newYork = new DMSPoint(
   new DMSCoordinate(40, 43, 50.196),
-  new DMSCoordinate(73, 56, 6.8712)
+  new DMSCoordinate(-73, 56, 6.8712)
 );
 
 // Madrid DMS coordinates are
@@ -60,7 +60,7 @@ const newYork = new DMSPoint(
 // longitude 3° 42' 13.6440'' W
 const madrid = new DMSPoint(
   new DMSCoordinate(40, 25, 0.39),
-  new DMSCoordinate(3, 42, 13.644)
+  new DMSCoordinate(-3, 42, 13.644)
 );
 
 const haversine = new Haversine(UnitOfDistance.Mile);
@@ -211,7 +211,7 @@ import { DMSPoint } from "haversine-ts";
 
 const newYork = new DMSPoint(
   new DMSCoordinate(40, 43, 50.196),
-  new DMSCoordinate(73, 56, 6.8712)
+  new DMSCoordinate(-73, 56, 6.8712)
 );
 
 const newYorkLatitude = newYork.latitude;
@@ -239,7 +239,7 @@ import { DMSPoint } from "haversine-ts";
 
 const newYork = new DMSPoint(
   new DMSCoordinate(40, 43, 50.196),
-  new DMSCoordinate(73, 56, 6.8712)
+  new DMSCoordinate(-73, 56, 6.8712)
 );
 const newYorkDD = newYork.toDDPoint();
 
