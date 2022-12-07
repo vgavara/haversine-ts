@@ -1,6 +1,6 @@
 import { DDPoint } from "./ddPoint";
 import { SphereBearing } from "./sphereBearing";
-import { toRadians } from "./helpers";
+import { toRadians, toDegrees } from "./helpers";
 
 const equatorialEarthRadii = {
   [UnitOfDistance.Metre]: 6378137,
@@ -70,16 +70,58 @@ export class Haversine {
    * Calculates the sphere bearing, or start and end bearings, of the path
    * between two points in a sphere.
    *
-   * @param {DDPoint} pointA - Point A, in decimal degrees coordinates.
-   * @param {DDPoint} pointB - Point B, in decimal degrees coordinates.
-   * @returns {SphereBearing} Bearings of the path from pointA to pointB, in
-   *   degrees (0 to 360, clockwise from North).
+   * @param {DDPoint} startPoint - Start point, in decimal degrees coordinates.
+   * @param {DDPoint} endPoint - End point, in decimal degrees coordinates.
+   * @returns {SphereBearing} Bearings of the path from startPoint to endPoint,
+   *   in degrees (0 to 360, clockwise from North).
    */
-  getBearing(pointA: DDPoint, pointB: DDPoint): SphereBearing {
-    const startBearing = this.getStartBearing(pointA, pointB);
-    const endBearing = (this.getStartBearing(pointB, pointA) + 180) % 360;
+  getBearing(startPoint: DDPoint, endPoint: DDPoint): SphereBearing {
+    const startBearing = this.getStartBearing(startPoint, endPoint);
+    const endBearing = (this.getStartBearing(endPoint, startPoint) + 180) % 360;
 
     return new SphereBearing(startBearing, endBearing);
+  }
+
+  /**
+   * Calculates the coordinates of an end point given an start point, a bearing
+   * and a distance.
+   *
+   * @param {DDPoint} startPoint - Start point, in decimal degrees coordinates.
+   * @param {number} bearing Bearing to the end point, in degrees (0 to 360,
+   *   clockwise from North).
+   * @param {number} distance - Distance from the start point to the targetted
+   *   point, using as unit of measure that set in the class constructor
+   *   (metres, kilometres or miles).
+   * @returns {DDPoint} End point, in decimal degrees coordinates.
+   */
+  getPoint(startPoint: DDPoint, bearing: number, distance: number): DDPoint {
+    if (distance < 0)
+      throw new Error("Distance out of range: Must be equal of higher than 0");
+    if (bearing < 0 || bearing >= 360)
+      throw new Error("Bearing out of range: Must be between 0 and < 360");
+
+    const startLatitude = toRadians(startPoint.latitude);
+    const startLongitude = toRadians(startPoint.longitude);
+    const angularDistance = distance / this.sphereRadius;
+    const startBearing = toRadians(bearing);
+
+    const endLatitude = Math.asin(
+      Math.sin(startLatitude) * Math.cos(angularDistance) +
+        Math.cos(startLatitude) *
+          Math.sin(angularDistance) *
+          Math.cos(startBearing)
+    );
+    const endLongitude =
+      startLongitude +
+      Math.atan2(
+        Math.sin(startBearing) *
+          Math.sin(angularDistance) *
+          Math.cos(startLatitude),
+        Math.cos(angularDistance) -
+          Math.sin(startLatitude) * Math.sin(endLatitude)
+      );
+
+    return new DDPoint(toDegrees(endLatitude), toDegrees(endLongitude));
   }
 
   /**

@@ -6,7 +6,8 @@ import {
   earthERPointABDistances,
   earthVolumetricMeanRadius,
   earthVMRPointABDistances,
-  bearingAB
+  bearingAB,
+  startBearingAB
 } from "./mocks";
 import { round } from "./helpers";
 
@@ -55,5 +56,18 @@ export default () => {
 
     expect(round(bearing.start, 1)).to.be.equal(round(bearingAB.start, 1));
     expect(round(bearing.end, 1)).to.be.equal(round(bearingAB.end, 1));
+  });
+
+  it("should calculate the endpoint given a start point, a bearing and a distance", () => {
+    const haversine = new Haversine(UnitOfDistance.Kilometre);
+
+    const endPoint = haversine.getPoint(
+      pointA,
+      startBearingAB,
+      earthERPointABDistances[UnitOfDistance.Kilometre]
+    );
+
+    expect(round(endPoint.latitude, 4)).to.be.eql(round(pointB.latitude, 4));
+    expect(round(endPoint.longitude, 4)).to.be.eql(round(pointB.longitude, 4));
   });
 };

@@ -37,10 +37,10 @@ export const dmsLongitude = {
 export const pointA = new DDPoint(decimalLatitude, decimalLongitude);
 export const pointB = new DDPoint(decimalLongitude, decimalLatitude);
 
-export const bearingAB = new SphereBearing(
-  114.89155195269666,
-  148.4680591475153
-);
+export const startBearingAB = 114.89155195269666;
+export const endBearingAB = 148.4680591475153;
+
+export const bearingAB = new SphereBearing(startBearingAB, endBearingAB);
 
 export const earthERPointABDistances = {
   [UnitOfDistance.Metre]: 9863963.349498631,
