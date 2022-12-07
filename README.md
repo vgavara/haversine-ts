@@ -306,7 +306,6 @@ console.log(
 - Returns:
   - [<code>SphereBearing</code>](#SphereBearing) - Bearings of the path from startPoint to endPoint, in degrees (0 to 360, clockwise from North).
 
-
 <a name="Haversine+getDistance"></a>
 
 #### haversine.getDistance(pointA, pointB) ⇒ <code>number</code>
