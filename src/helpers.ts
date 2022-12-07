@@ -8,3 +8,12 @@ const radiansCoefficient = Math.PI / 180;
  */
 export const toRadians = (degreesValue: number): number =>
   degreesValue * radiansCoefficient;
+
+/**
+ * Converts a radians value into a degrees equivalent.
+ *
+ * @param {number} radiansValue - Radians value.
+ * @returns {number} Degrees equivalent of radiansValue.
+ */
+export const toDegrees = (radiansValue: number): number =>
+  radiansValue / radiansCoefficient;

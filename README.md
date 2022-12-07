@@ -260,8 +260,9 @@ Haversine formula resolver.
 - Constructors:
   - [new Haversine([uod], [sphereRadius])](#new_Haversine_new)
 - Methods:
+  - [.getBearing(startPoint, endPoint)](#Haversine+getBearing) ⇒ [<code>SphereBearing</code>](#SphereBearing)
   - [.getDistance(pointA, pointB)](#Haversine+getDistance) ⇒ <code>number</code>
-  - [.getBearing(pointA, pointB)](#Haversine+getBearing) ⇒ [<code>SphereBearing</code>](#SphereBearing)
+  - [.getPoint(startPoint, bearing, distance)](#Haversine+getPoint) ⇒ [<code>DDPoint</code>](#DDPoint)
 
 <a name="new_Haversine_new"></a>
 
@@ -278,6 +279,33 @@ const haversine = new Haversine(UnitOfDistance.Mile);
 - Parameters:
   - uod ([<code>UnitOfDistance</code>](#UnitOfDistance), optional): Unit of distance (default: <code>UnitOfDistance.Kilometre</code>)
   - sphereRadius (<code>number</code>, optional): Custom sphere radius in uod units (default: equatorial Earth radius).
+
+<a name="Haversine+getBearing"></a>
+
+#### haversine.getBearing(startPoint, endPoint) ⇒ <code>SphereBearing</code>
+
+Calculates the sphere bearing, or start and end bearings, of the path between two points in a sphere.
+
+```typescript
+import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
+
+const newYork = new DDPoint(40.73061, -73.935242);
+const madrid = new DDPoint(40.416775, -3.70379);
+
+const haversine = new Haversine();
+const bearing = haversine.getBearing(newYork, madrid);
+
+console.log(
+  `The start bearing of the path from New York to Madrid is ${bearing.start} degrees, and the end bearing is ${bearing.end} degrees.`
+);
+```
+
+- Parameters:
+  - startPoint (<code>DDPoint</code>): Start point, in decimal degrees coordinates.
+  - endPoint (<code>DDPoint</code>): End point, in decimal degrees coordinates.
+- Returns:
+  - [<code>SphereBearing</code>](#SphereBearing) - Bearings of the path from startPoint to endPoint, in degrees (0 to 360, clockwise from North).
+
 
 <a name="Haversine+getDistance"></a>
 
@@ -305,31 +333,33 @@ console.log(`The distance from New York to Madrid is ${distance} kilometres.`);
   - <code>number</code> - Distance between the points, in the unit of distance set
     in the class constructor.
 
-<a name="Haversine+getBearing"></a>
+<a name="Haversine+getPoint"></a>
 
-#### haversine.getBearing(pointA, pointB) ⇒ <code>SphereBearing</code>
+#### haversine.getPoint(startPoint, bearing, distance) ⇒ <code>DDPoint</code>
 
-Calculates the sphere bearing, or start and end bearings, of the path between two points in a sphere.
+Calculates the coordinates of an end point given an start point, a bearing and a distance.
 
 ```typescript
-import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
+import { DDPoint, Haversine } from "haversine-ts";
 
 const newYork = new DDPoint(40.73061, -73.935242);
-const madrid = new DDPoint(40.416775, -3.70379);
+const bearing = 65.71472;
+const distance = 5762;
 
 const haversine = new Haversine();
-const bearing = haversine.getBearing(newYork, madrid);
+const madrid = haversine.getPoint(newYork, bearing, distance);
 
 console.log(
-  `The start bearing of the path from New York to Madrid is ${bearing.start} degrees, and the end bearing is ${bearing.end} degrees.`
+  `The endpoint starting from New York with a bearing of ${bearing} degrees at a distance of ${distance} kilometers is Madrid`
 );
 ```
 
 - Parameters:
-  - pointA (<code>DDPoint</code>): Point A, in decimal degrees coordinates.
-  - pointB (<code>DDPoint</code>): Point B, in decimal degrees coordinates.
-- Returns:
-  - [<code>SphereBearing</code>](#SphereBearing) - Bearings of the path from pointA to pointB, in degrees (0 to 360, clockwise from North).
+  - startPoint (<code>DDPoint</code>): Start point, in decimal degrees coordinates.
+  - bearing (<code>number</code>): Bearing to the end point, in degrees (0 to 360, clockwise from North).
+  - distance (<code>number</code>): Distance from the start point to the targetted point, using as unit of measure that set in the class constructor (metres, kilometres or miles).
+- Returns:.
+  - [<code>DDPoint</code>](#DDPoint) - End point, in decimal degrees coordinates.
 
 <a name="SphereBearing"></a>
 
