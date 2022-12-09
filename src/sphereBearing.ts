@@ -3,8 +3,8 @@
  * (orthodrome) between two points.
  */
 export class SphereBearing {
-  start: number;
-  end: number;
+  readonly start: number;
+  readonly end: number;
 
   /**
    * Initializes a sphere bearing object instance.

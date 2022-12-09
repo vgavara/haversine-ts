@@ -2,9 +2,9 @@ import { DDPoint } from "./ddPoint";
 
 /** Latitude/Longitude coordinate defined in degrees minutes seconds (DMS) */
 export class DMSCoordinate {
-  degrees: number;
-  minutes: number;
-  seconds: number;
+  readonly degrees: number;
+  readonly minutes: number;
+  readonly seconds: number;
 
   /**
    * Initializes a DMSCoordinate object instance
@@ -38,8 +38,8 @@ export class DMSCoordinate {
  * (DMS)
  */
 export class DMSPoint {
-  latitude: DMSCoordinate;
-  longitude: DMSCoordinate;
+  readonly latitude: DMSCoordinate;
+  readonly longitude: DMSCoordinate;
 
   /**
    * Creates a sphere point object instance.
