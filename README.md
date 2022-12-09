@@ -12,7 +12,7 @@ Main package features:
 - Allows calculating distances between to points in metres, kilometres or miles.
 - Allows using decimal degree (DD) or degrees minutes seconds (DMS) coordinates.
 - Allows calculating start and end bearings of a path between two points.
-- Allows specifying custom sphere radius (default is Earth equatorial radius).
+- Allows calculating the end point of a path given its start point, start bearing and distance.
 
 ## At a glance
 
@@ -72,7 +72,7 @@ console.log(`The distance from New York to Madrid is ${distance} miles.`);
 ### Calculate the bearing between two points
 
 ```typescript
-import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
+import { DDPoint, Haversine } from "haversine-ts";
 
 const newYork = new DDPoint(40.73061, -73.935242);
 const madrid = new DDPoint(40.416775, -3.70379);
@@ -82,6 +82,23 @@ const bearing = haversine.getBearing(newYork, madrid);
 
 console.log(
   `The start bearing of the path from New York to Madrid is ${bearing.start} degrees, and the end bearing is ${bearing.end} degrees.`
+);
+```
+
+### Calculate the endpoint of a path
+
+```typescript
+import { DDPoint, Haversine } from "haversine-ts";
+
+const newYork = new DDPoint(40.73061, -73.935242);
+const bearing = 65.71472;
+const distance = 5762;
+
+const haversine = new Haversine();
+const madrid = haversine.getPoint(newYork, bearing, distance);
+
+console.log(
+  `Madrid is the endpoint of the path starting in New York with a bearing of ${bearing} degrees at a distance of ${distance} kilometers`
 );
 ```
 
@@ -97,7 +114,7 @@ npm install haversine-ts
 
 ### Overview
 
-The [Haversine](#Haversine) class supports the implementation of the distance and bearing resolvers.
+The [Haversine](#Haversine) class supports the implementation of the sphere path resolvers (distance and bearing between two points, end point given start point, bearing and distance).
 
 It uses as input decimal degrees (DD) coordinates defined as [DDPoint](#DDPoint) class object instances, that can be converted into degrees minutes seconds (DMS) coordinates as instances of the [DMSPoint](#DMSPoint) class. Each [DMSPoint](#DMSPoint) object instance is composed by two [DMSCoordinate](#DMSCoordinate) class object instances.
 
@@ -111,6 +128,9 @@ Sphere point defined by a latitude and a longitude in decimal degrees (DD)
 
 - Constructors:
   - [new DDPoint(latitude, longitude)](#new_DDPoint_new)
+- Properties:
+  - [latitude](#DDPoint+latitude)
+  - [longitude](#DDPoint+longitude)
 - Methods:
   - [.toDMSPoint()](#DDPoint+toDMSPoint) ⇒ [<code>DMSPoint</code>](#DMSPoint)
 
@@ -130,11 +150,17 @@ console.log(
 );
 ```
 
-- Parameters
-  - latitude (`number`): Latitude coordinate in decimal degrees (negative for southern latitudes).
-  - longitude (`number`): Longitude coordinate in decimal degrees (negative for western longitudes).
-- Throws:
-  - Error if latitude is out of the range -90 to 90, or longitude is out of the range -180 to 180.
+<a name="DDPoint+latitude"></a>
+
+#### ddPoint.latitude ⇒ <code>number</code>
+
+Returns the point latitude set in the object instance constructor.
+
+<a name="DDPoint+longitude"></a>
+
+#### ddPoint.longitude ⇒ <code>number</code>
+
+Returns the point longitude set in the object instance constructor.
 
 <a name="DDPoint+toDMSPoint"></a>
 
@@ -164,6 +190,10 @@ Latitude/Longitude coordinate defined in degrees minutes seconds (DMS).
 
 - Constructors:
   - [new DMSCoordinate(degrees, minutes, seconds)](#new_DMSCoordinate_new)
+- Properties:
+  - [degrees](#DMSCoordinate+degrees)
+  - [minutes](#DMSCoordinate+minutes)
+  - [seconds](#DMSCoordinate+seconds)
 
 <a name="new_DMSCoordinate_new"></a>
 
@@ -188,6 +218,24 @@ console.log(
 - Throws:
   - Error if degrees, minutes or seconds are out of range.
 
+<a name="DMSCoordinate+degrees"></a>
+
+#### dmsCoordinate.degrees ⇒ <code>number</code>
+
+Returns the coordinate degrees set in the constructor.
+
+<a name="DMSCoordinate+minutes"></a>
+
+#### dmsCoordinate.minutes ⇒ <code>number</code>
+
+Returns the coordinate minutes set in the constructor.
+
+<a name="DMSCoordinate+seconds"></a>
+
+#### dmsCoordinate.seconds ⇒ <code>number</code>
+
+Returns the coordinate seconds set in the constructor.
+
 <a name="DMSPoint"></a>
 
 ### DMSPoint class
@@ -197,6 +245,9 @@ Sphere point defined by a latitude and a longitude in degrees minutes seconds
 
 - Constructors:
   - [new DMSPoint(latitude, longitude)](#new_DMSPoint_new)
+- Properties
+  - [latitude](#DMSPoint+latitude)
+  - [longitude](#DMSPoint+longitude)
 - Methods:
   - [.toDDPoint()](#DMSPoint+toDDPoint) ⇒ [<code>DDPoint</code>](#DDPoint)
 
@@ -227,6 +278,18 @@ console.log(
   - longitude ([<code>DMSCoordinate</code>](#DMSCoordinate)): Longitude coordinate in degrees minutes seconds.
 - Throws:
   - Error if latitude degrees are out of range (-90 to 90).
+
+<a name="DMSPoint+latitude"></a>
+
+#### dmsPoint.latitude ⇒ <code>DMSCoordinate</code>
+
+Returns the point latitude set in the constructor.
+
+<a name="DMSPoint+longitude"></a>
+
+#### dmsPoint.longitude ⇒ <code>DMSCoordinate</code>
+
+Returns the point longitude set in the constructor.
 
 <a name="DMSPoint+toDDPoint"></a>
 
@@ -287,7 +350,7 @@ const haversine = new Haversine(UnitOfDistance.Mile);
 Calculates the sphere bearing, or start and end bearings, of the path between two points in a sphere.
 
 ```typescript
-import { DDPoint, Haversine, UnitOfDistance } from "haversine-ts";
+import { DDPoint, Haversine } from "haversine-ts";
 
 const newYork = new DDPoint(40.73061, -73.935242);
 const madrid = new DDPoint(40.416775, -3.70379);
@@ -336,7 +399,7 @@ console.log(`The distance from New York to Madrid is ${distance} kilometres.`);
 
 #### haversine.getPoint(startPoint, bearing, distance) ⇒ <code>DDPoint</code>
 
-Calculates the coordinates of an end point given an start point, a bearing and a distance.
+Calculates the coordinates of the end point of a path given its start point, start bearing and distance.
 
 ```typescript
 import { DDPoint, Haversine } from "haversine-ts";
@@ -349,7 +412,7 @@ const haversine = new Haversine();
 const madrid = haversine.getPoint(newYork, bearing, distance);
 
 console.log(
-  `The endpoint starting from New York with a bearing of ${bearing} degrees at a distance of ${distance} kilometers is Madrid`
+  `Madrid is the endpoint of the path starting in New York with a bearing of ${bearing} degrees at a distance of ${distance} kilometers`
 );
 ```
 
@@ -368,6 +431,9 @@ Sphere bearing as a tuple of start and end bearings of a sphere path (orthodrome
 
 - Constructors:
   - [new SphereBearing(start, end)](#new_SphereBearing_new)
+- Properties:
+  - [start](#SphereBearing+start)
+  - [end](#SphereBearing+end)
 
 <a name="new_SphereBearing_new"></a>
 
@@ -390,6 +456,18 @@ console.log(
   - end (`number`): End bearing, from 0 to <360 clockwise from North.
 - Throws:
   - Error if start or end bearings are out of range.
+
+<a name="SphereBearing+start"></a>
+
+#### sphereBearing.start ⇒ <code>number</code>
+
+Start bearing set in the constructor.
+
+<a name="SphereBearing+end"></a>
+
+#### sphereBearing.end ⇒ <code>number</code>
+
+End bearing set in the constructor.
 
 <a name="UnitOfDistance"></a>
 

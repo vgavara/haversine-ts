@@ -2,8 +2,8 @@ import { DMSCoordinate, DMSPoint } from "./dmsPoint";
 
 /** Sphere point defined by a latitude and a longitude in decimal degrees (DD) */
 export class DDPoint {
-  latitude: number;
-  longitude: number;
+  readonly latitude: number;
+  readonly longitude: number;
 
   /**
    * Creates a sphere point object instance.
