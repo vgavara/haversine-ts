@@ -20,6 +20,17 @@ export const enum UnitOfDistance {
   Mile
 }
 
+/**
+ * Enum for sorting direction
+ *
+ * @readonly
+ * @enum {number}
+ */
+export const enum Sorting {
+  Ascending,
+  Descending
+}
+
 /** Haversine formula resolver */
 export class Haversine {
   private sphereRadius: number;
@@ -83,6 +94,26 @@ export class Haversine {
   }
 
   /**
+   * Finds points that are within a specified distance range from a reference point.
+   *
+   * @param {DDPoint} referencePoint - The reference point to calculate distances from.
+   * @param {DDPoint[]} points - The array of points to be filtered.
+   * @param {number} distance - The maximum distance from the reference point, in the units of distance set in the class constructor
+   * @returns {DDPoint[]} A new array containing only the points within the specified distance.
+   */
+  getInRange(
+    referencePoint: DDPoint,
+    points: DDPoint[],
+    distance: number
+  ): DDPoint[] {
+    if (!points?.length || distance < 0) return [];
+   
+    return points.filter(
+      (point) => this.getDistance(referencePoint, point) <= distance
+    );
+  }
+
+  /**
    * Calculates the coordinates of an end point given an start point, a bearing
    * and a distance.
    *
@@ -122,6 +153,35 @@ export class Haversine {
       );
 
     return new DDPoint(toDegrees(endLatitude), toDegrees(endLongitude));
+  }
+
+  /**
+   * Sorts an array of points by their distance to a reference point.
+   *
+   * @param {DDPoint} referencePoint - The reference point to calculate distances from.
+   * @param {DDPoint[]} points - The array of points to be sorted.
+   * @param {Sorting} [sorting=Sorting.Ascending] - The sorting direction (ascending or descending).
+   * @returns {DDPoint[]} A new array containing the points sorted by distance.
+   */
+  sortByDistance(
+    referencePoint: DDPoint,
+    points: DDPoint[],
+    sorting: Sorting = Sorting.Ascending
+  ): DDPoint[] {
+    if (!points?.length) return [];
+
+    const sortedPoints = [...points];
+
+    sortedPoints.sort((pointA, pointB) => {
+      const distanceA = this.getDistance(referencePoint, pointA);
+      const distanceB = this.getDistance(referencePoint, pointB);
+
+      return sorting === Sorting.Ascending
+        ? distanceA - distanceB
+        : distanceB - distanceA;
+    });
+
+    return sortedPoints;
   }
 
   /**
