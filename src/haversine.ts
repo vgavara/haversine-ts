@@ -20,6 +20,17 @@ export const enum UnitOfDistance {
   Mile
 }
 
+/**
+ * Enum for sorting direction
+ *
+ * @readonly
+ * @enum {number}
+ */
+export const enum Sorting {
+  Ascending,
+  Descending
+}
+
 /** Haversine formula resolver */
 export class Haversine {
   private sphereRadius: number;
@@ -122,6 +133,36 @@ export class Haversine {
       );
 
     return new DDPoint(toDegrees(endLatitude), toDegrees(endLongitude));
+  }
+
+  /**
+   * Sorts an array of points by their distance to a reference point.
+   *
+   * @param {DDPoint} referencePoint - The reference point to calculate distances from.
+   * @param {DDPoint[]} points - The array of points to be sorted.
+   * @param {Sorting} [sorting=Sorting.Ascending] - The sorting direction (ascending or descending).
+   * @returns {DDPoint[]} A new array containing the points sorted by distance.
+   */
+  sortByDistance(
+    referencePoint: DDPoint,
+    points: DDPoint[],
+    sorting: Sorting = Sorting.Ascending
+  ): DDPoint[] {
+    if (!points || points.length === 0)
+      return [];
+
+    const sortedPoints = [...points];
+
+    sortedPoints.sort((pointA, pointB) => {
+      const distanceA = this.getDistance(referencePoint, pointA);
+      const distanceB = this.getDistance(referencePoint, pointB);
+
+      return sorting === Sorting.Ascending
+        ? distanceA - distanceB
+        : distanceB - distanceA;
+    });
+
+    return sortedPoints;
   }
 
   /**
