@@ -106,7 +106,7 @@ export class Haversine {
     points: DDPoint[],
     distance: number
   ): DDPoint[] {
-    if (!points || points.length === 0 || distance < 0) return [];
+    if (!points?.length || distance < 0) return [];
    
     return points.filter(
       (point) => this.getDistance(referencePoint, point) <= distance
@@ -168,7 +168,7 @@ export class Haversine {
     points: DDPoint[],
     sorting: Sorting = Sorting.Ascending
   ): DDPoint[] {
-    if (!points || points.length === 0) return [];
+    if (!points?.length) return [];
 
     const sortedPoints = [...points];
 
