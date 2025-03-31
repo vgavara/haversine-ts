@@ -13,6 +13,7 @@ Main package features:
 - Allows using decimal degree (DD) or degrees minutes seconds (DMS) coordinates.
 - Allows calculating start and end bearings of a path between two points.
 - Allows calculating the end point of a path given its start point, start bearing and distance.
+- Allows sorting points by distance from a reference point.
 
 ## At a glance
 
@@ -100,6 +101,30 @@ const madrid = haversine.getPoint(newYork, bearing, distance);
 console.log(
   `Madrid is the endpoint of the path starting in New York with a bearing of ${bearing} degrees at a distance of ${distance} kilometers`
 );
+```
+
+### Sort points by distance from a reference point
+
+```typescript
+import { DDPoint, Haversine, Sorting } from "haversine-ts";
+
+const madrid = new DDPoint(40.416775, -3.70379);
+const cities = [
+  new DDPoint(52.5200, 13.4050),     // Berlin
+  new DDPoint(40.73061, -73.935242), // New York
+  new DDPoint(48.8566, 2.3522),      // Paris
+  new DDPoint(35.6762, 139.6503)     // Tokyo
+];
+
+const haversine = new Haversine();
+const sortedCities = haversine.sortByDistance(madrid, cities);
+
+console.log(
+  `The cities sorted by distance from Madrid (nearest to farthest) are:`
+);
+sortedCities.forEach((point, index) => {
+  console.log(`${index + 1}. Latitude ${point.latitude}, Longitude ${point.longitude}`);
+});
 ```
 
 ## Installation
@@ -326,6 +351,7 @@ Haversine formula resolver.
   - [.getBearing(startPoint, endPoint)](#Haversine+getBearing) ⇒ [<code>SphereBearing</code>](#SphereBearing)
   - [.getDistance(pointA, pointB)](#Haversine+getDistance) ⇒ <code>number</code>
   - [.getPoint(startPoint, bearing, distance)](#Haversine+getPoint) ⇒ [<code>DDPoint</code>](#DDPoint)
+  - [.sortByDistance(referencePoint, points, [sorting])](#Haversine+sortByDistance) ⇒ <code>DDPoint[]</code>
 
 <a name="new_Haversine_new"></a>
 
@@ -423,6 +449,31 @@ console.log(
 - Returns:.
   - [<code>DDPoint</code>](#DDPoint) - End point, in decimal degrees coordinates.
 
+<a name="Haversine+sortByDistance"></a>
+
+#### haversine.sortByDistance(referencePoint, points, [sorting]) ⇒ <code>DDPoint[]</code>
+
+Sorts an array of points by their distance to a reference point.
+
+```typescript
+import { DDPoint, Haversine, Sorting } from "haversine-ts";
+
+const madrid = new DDPoint(40.416775, -3.70379);
+const cities = [
+  new DDPoint(52.5200, 13.4050),     // Berlin
+  new DDPoint(40.73061, -73.935242), // New York
+  new DDPoint(48.8566, 2.3522),      // Paris
+  new DDPoint(35.6762, 139.6503)     // Tokyo
+];
+
+const haversine = new Haversine();
+const nearestCities = haversine.sortByDistance(madrid, cities);
+const farthestCities = haversine.sortByDistance(madrid, cities, Sorting.Descending);
+
+console.log("Cities sorted by distance from Madrid (nearest to farthest):", nearestCities);
+console.log("Cities sorted by distance from Madrid (farthest to nearest):", farthestCities);
+```
+
 <a name="SphereBearing"></a>
 
 ### SphereBearing
@@ -478,6 +529,15 @@ End bearing set in the constructor.
 | Metre     | <code>0</code> | Distance in metres     |
 | Kilometre | <code>1</code> | Distance in kilometres |
 | Mile      | <code>2</code> | Distance in miles      |
+
+<a name="Sorting"></a>
+
+### Sorting enum
+
+| Enum      | Value          | Description                                 |
+| --------- | -------------- | ------------------------------------------- |
+| Ascending | <code>0</code> | Sort points from nearest to farthest        |
+| Descending| <code>1</code> | Sort points from farthest to nearest        |
 
 ## Support
 

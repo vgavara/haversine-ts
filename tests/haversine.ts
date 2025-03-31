@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { Haversine, UnitOfDistance } from "@src/haversine";
+import { Haversine, UnitOfDistance, Sorting } from "@src/haversine";
+import { DDPoint } from "@src/ddPoint";
 import {
   pointA,
   pointB,
@@ -69,5 +70,48 @@ export default () => {
 
     expect(round(endPoint.latitude, 4)).to.be.eql(round(pointB.latitude, 4));
     expect(round(endPoint.longitude, 4)).to.be.eql(round(pointB.longitude, 4));
+  });
+
+  it("should sort points by distance from a reference point in ascending order", () => {
+    const haversine = new Haversine();
+    const referencePoint = new DDPoint(0, 0);
+    
+    const point1 = new DDPoint(1, 1);     // ~157km
+    const point2 = new DDPoint(0.5, 0.5); // ~79km
+    const point3 = new DDPoint(2, 2);     // ~314km
+    
+    const points = [point1, point3, point2];
+    const sortedPoints = haversine.sortByDistance(referencePoint, points);
+    
+    // Points should be sorted from nearest to farthest: point2, point1, point3
+    expect(sortedPoints[0]).to.equal(point2);
+    expect(sortedPoints[1]).to.equal(point1);
+    expect(sortedPoints[2]).to.equal(point3);
+  });
+
+  it("should sort points by distance from a reference point in descending order", () => {
+    const haversine = new Haversine();
+    const referencePoint = new DDPoint(0, 0);
+    
+    const point1 = new DDPoint(1, 1);     // ~157km
+    const point2 = new DDPoint(0.5, 0.5); // ~79km
+    const point3 = new DDPoint(2, 2);     // ~314km
+    
+    const points = [point1, point2, point3];
+    const sortedPoints = haversine.sortByDistance(referencePoint, points, Sorting.Descending);
+    
+    // Points should be sorted from farthest to nearest: point3, point1, point2
+    expect(sortedPoints[0]).to.equal(point3);
+    expect(sortedPoints[1]).to.equal(point1);
+    expect(sortedPoints[2]).to.equal(point2);
+  });
+
+  it("should return an empty array when sorting an empty array of points", () => {
+    const haversine = new Haversine();
+    const referencePoint = new DDPoint(0, 0);
+    
+    const sortedPoints = haversine.sortByDistance(referencePoint, []);
+    
+    expect(sortedPoints).to.be.an('array').that.is.empty;
   });
 };
