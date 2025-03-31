@@ -94,6 +94,26 @@ export class Haversine {
   }
 
   /**
+   * Finds points that are within a specified distance range from a reference point.
+   *
+   * @param {DDPoint} referencePoint - The reference point to calculate distances from.
+   * @param {DDPoint[]} points - The array of points to be filtered.
+   * @param {number} distance - The maximum distance from the reference point, in the units of distance set in the class constructor
+   * @returns {DDPoint[]} A new array containing only the points within the specified distance.
+   */
+  getInRange(
+    referencePoint: DDPoint,
+    points: DDPoint[],
+    distance: number
+  ): DDPoint[] {
+    if (!points || points.length === 0 || distance < 0) return [];
+   
+    return points.filter(
+      (point) => this.getDistance(referencePoint, point) <= distance
+    );
+  }
+
+  /**
    * Calculates the coordinates of an end point given an start point, a bearing
    * and a distance.
    *
@@ -148,8 +168,7 @@ export class Haversine {
     points: DDPoint[],
     sorting: Sorting = Sorting.Ascending
   ): DDPoint[] {
-    if (!points || points.length === 0)
-      return [];
+    if (!points || points.length === 0) return [];
 
     const sortedPoints = [...points];
 
